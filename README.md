@@ -24,7 +24,7 @@ If you project doesn't have a .devcontainer folder yet, add this git repository
 as a submodule into you Perl project using the cli below:
 
 ```
-git submodule add gogs@git.camara.gov.br:satus/vscode-perl-dev-container.git .devcontainer
+git submodule add git@github.com:samueldc/vscode-perl-dev-container-otrs.git .devcontainer
 ```
 
 Then, you should click on the Dev Containers extension icon in the VS Code status
