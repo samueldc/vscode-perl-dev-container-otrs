@@ -8,7 +8,11 @@
 	// "features": {},
 	"features": {
 		"ghcr.io/devcontainers/features/git:1": {},
-		"ghcr.io/devcontainers/features/docker-in-docker:2": {},
+		"ghcr.io/devcontainers/features/docker-in-docker:2": {
+			"disableIp6tables": "true",
+			"dockerDefaultAddressPool": "base=10.20.0.0/16,size=24",
+			"version": "26"
+		},
 		"ghcr.io/devcontainers/features/common-utils:2": {
 			"installZsh": "true",
 			"installOhMyZsh": "true",
@@ -26,7 +30,38 @@
 	// "customizations": {},
 	"customizations": {
 		"vscode": {
-			"extensions": ["richterger.perl"]
+			"extensions": [
+				"richterger.perl",
+				"donjayamanne.githistory",
+				"dracula-theme.theme-dracula",
+				"entuent.fira-code-nerd-font",
+				"PKief.material-icon-theme"
+				// "ms-azuretools.vscode-docker"
+			],
+			"settings": {
+					"files.associations": {
+						"*.sopm": "xml"
+					},
+					"workbench.iconTheme": "material-icon-theme",
+					"editor.tabSize": 2,
+					"editor.rulers": [
+							80,
+							120
+					],
+					"files.eol": "\n",
+					"perl.perlInc": [
+							"${containerWorkspaceFolder}/Custom",
+							"${containerWorkspaceFolder}",
+							"${containerWorkspaceFolder}/Kernel/cpan-lib"
+					],
+					"perl.containerMode": "exec",
+					"perl.containerName": "teste-httpd-1",
+					"workbench.colorTheme": "Dracula Theme",
+					"editor.fontFamily": "fira-code-nerd, FiraCode Nerd Font, 'Courier New', monospace",
+					"editor.fontLigatures": true,
+					"editor.fontSize": 12,
+					"terminal.integrated.fontSize": 12
+				}
 		}
 	},
 
@@ -35,8 +70,10 @@
 
 	// Mounts
 	"mounts": [
-    "type=bind,source=${localWorkspaceFolder},target=/work",
-    "type=bind,source=/home/${localEnv:USER}/.ssh,target=/home/vscode/.ssh,readonly"
+    // "type=bind,source=${localWorkspaceFolder},target=${containerWorkspaceFolder}",
+    "type=bind,source=/home/${localEnv:USER}/.ssh,target=/home/vscode/.ssh,readonly",
+		// "type=bind,source=/home/${localEnv:USER}/.vscode-remote-containers/history,target=/home/vscode/.bash",
+		"type=volume,source=${localWorkspaceFolderBasename}-history,target=/home/vscode/.bash"
   ],
 
 	"postCreateCommand": [

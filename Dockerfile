@@ -33,5 +33,25 @@ RUN groupadd --gid $USER_GID $USERNAME \
     && useradd -g 5051 -G 33 -u 5051 -M otrs \
     && usermod -aG otrs,www-data $USERNAME
 
+# Setup history
+RUN SNIPPET="export PROMPT_COMMAND='history -a' && export HISTFILE=/home/$USERNAME/.bash/history" \
+    && mkdir /home/$USERNAME/.bash \
+    && touch /home/$USERNAME/.bash/history \
+    && chown -R $USERNAME /home/$USERNAME/.bash \
+    && echo "$SNIPPET" >> "/home/$USERNAME/.bashrc"
+
+# Installs envconsul
+ADD https://releases.hashicorp.com/envconsul/0.13.2/envconsul_0.13.2_linux_amd64.zip /var/tmp/
+RUN apt-get update \
+    && apt-get install -y unzip \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/* \
+    && unzip /var/tmp/envconsul_0.13.2_linux_amd64.zip -d /usr/bin \
+    && apt-get remove -y unzip
+
 # [Optional] Set the default user. Omit if you want to keep the default as root.
 USER $USERNAME
+
+EXPOSE 3000
+EXPOSE 8080
+EXPOSE 8089
